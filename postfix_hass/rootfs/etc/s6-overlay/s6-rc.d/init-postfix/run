@@ -8,8 +8,15 @@ set -e
 
 bashio::log.info "Running init script..."
 
-DOMAIN=$(bashio::config 'myhostname')
-mynetworks=$(bashio::config 'mynetworks' | jq -r 'join(", ")')
+if ! DOMAIN=$(bashio::config 'myhostname'); then
+    bashio::log.error "Missing 'myhostname' configuration."
+    exit 1
+fi
+
+if ! mynetworks=$(bashio::config 'mynetworks' | jq -r 'join(", ")'); then
+    bashio::log.error "Missing or invalid 'mynetworks' configuration."
+    exit 1
+fi
 
 # add domain
 bashio::log.info "Set hostname to $DOMAIN..."
@@ -21,13 +28,13 @@ bashio::log.info "Set hostname to $DOMAIN... Done"
 
 bashio::log.info "Merging options & variables for template"
 # shellcheck disable=SC2046
-#JSON_CONF=$(jq '({options: .})' /data/options.json)
+JSON_CONF=$(jq '({options: .})' /data/options.json)
 
-#bashio::log.info "Generating postfix/main.cf from template in /etc/postfix/main.cf.gtpl"
+bashio::log.info "Generating postfix/main.cf from template in /etc/postfix/main.cf.gtpl"
 # shellcheck disable=SC2086
-#echo $JSON_CONF | tempio \
-#    -template /etc/postfix/main.cf.gtpl \
-#    -out /etc/postfix/main.cf.tmp
+echo $JSON_CONF | tempio \
+    -template /etc/postfix/main.cf.gtpl \
+    -out /etc/postfix/main.cf.tmp
 
 # add mynetworks in config
 bashio::log.info "Configure mynetworks: ${mynetworks}"

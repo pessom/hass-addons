@@ -9,5 +9,5 @@ set -e
 
 # start postfix
 bashio::log.info "Running postfix..."
-exec postfix start
+exec /usr/sbin/postfix start
 bashio::log.info "Running postfix... Done"

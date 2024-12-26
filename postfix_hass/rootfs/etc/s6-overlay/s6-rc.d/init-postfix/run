@@ -9,7 +9,7 @@ set -e
 bashio::log.info "Running init script..."
 
 DOMAIN=$(bashio::config 'myhostname')
-mynetworks=$(bashio::config.get 'mynetworks' | jq -r 'join(", ")')
+mynetworks=$(bashio::config 'mynetworks' | jq -r 'join(", ")')
 
 # add domain
 bashio::log.info "Set hostname to $DOMAIN..."

@@ -13,7 +13,7 @@ if ! DOMAIN=$(bashio::config 'myhostname'); then
     exit 1
 fi
 
-if ! mynetworks=$(bashio::config 'mynetworks' | jq -r 'join(", ")'); then
+if ! mynetworks=$(bashio::config 'mynetworks | join(", ")'); then
     bashio::log.error "Missing or invalid 'mynetworks' configuration."
     exit 1
 fi

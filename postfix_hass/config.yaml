@@ -1,0 +1,26 @@
+---
+version: 0.0.1
+hassio_api: false
+slug: postfix_hass
+name: postfix Home Assistant
+description: relay emails
+url: https://github.com/pessom/hass-addons/tree/main/postfix_hass
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+init: false
+map:
+  - ssl
+  - share
+options:
+  myhostname: null
+  mynetworks: [ ]
+ports:
+  25/tcp: 25
+schema:
+  myhostname: str
+  mynetworks:
+    - str

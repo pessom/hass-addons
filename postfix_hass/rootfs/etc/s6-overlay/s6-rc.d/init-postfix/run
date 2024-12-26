@@ -14,8 +14,8 @@ JSON_CONF=$(jq '({options: .})' /data/options.json)
 
 bashio::log.info "Generating postfix/main.cf from template in /etc/postfix/main.cf.gtpl"
 # shellcheck disable=SC2086
-#echo $JSON_CONF | tempio \
-#    -template /etc/postfix/main.cf.gtpl \
-#    -out /etc/postfix/main.cf
+echo $JSON_CONF | tempio \
+    -template /etc/postfix/main.cf.gtpl \
+    -out /etc/postfix/main.cf.tmp
 
 bashio::log.info "Init script done!"

@@ -1,6 +1,5 @@
 ---
 version: 0.0.1
-hassio_api: false
 slug: postfix_hass
 name: postfix Home Assistant
 description: relay emails
@@ -16,11 +15,13 @@ map:
   - ssl
   - share
 options:
+  log_level: info
   myhostname: null
   mynetworks: [ ]
 ports:
   25/tcp: 25
 schema:
+  log_level: list(trace|debug|info|notice|warning|error|fatal)
   myhostname: str
   mynetworks:
     - str

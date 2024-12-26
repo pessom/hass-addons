@@ -1,5 +1,5 @@
 ---
-version: 0.0.3
+version: 0.0.3-1
 slug: postfix_hass
 name: postfix Home Assistant
 description: relay emails

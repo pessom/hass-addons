@@ -1,5 +1,10 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 0.0.3-2
+
+- edit start script for run postfix
+- add dependency for init-postfix
+
 ## 0.0.3-1
 
 - fix permissions for run

@@ -8,6 +8,15 @@ set -e
 
 bashio::log.info "Running init script..."
 
+DOMAIN=$(bashio::config 'myhostname')
+
+# add domain
+bashio::log.info "Set hostname to $DOMAIN..."
+postconf -e myhostname="$DOMAIN"
+postconf -e mydestination="localhost"
+echo "$DOMAIN" > /etc/mailname
+echo "$DOMAIN" > /etc/hostname
+
 bashio::log.info "Merging options & variables for template"
 # shellcheck disable=SC2046
 JSON_CONF=$(jq '({options: .})' /data/options.json)

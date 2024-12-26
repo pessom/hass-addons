@@ -7,16 +7,7 @@
 
 set -e
 
-bashio::log.info "Merging options & variables for template"
-# shellcheck disable=SC2046
-JSON_CONF=$(jq '({options: .})' /data/options.json)
-
-bashio::log.info "Generating postfix/main.cf from template in /etc/postfix/main.cf.gtpl"
-# shellcheck disable=SC2086
-#echo $JSON_CONF | tempio \
-#    -template /etc/postfix/main.cf.gtpl \
-#    -out /etc/postfix/main.cf
-
 # start postfix
 bashio::log.info "Running postfix..."
 exec postfix start
+bashio::log.info "Running postfix... Done"

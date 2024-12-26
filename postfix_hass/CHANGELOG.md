@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 0.0.3-5
+
+- edit script for init-postfix
+
 ## 0.0.3-4
 
 - fix problem on start foreground postfix

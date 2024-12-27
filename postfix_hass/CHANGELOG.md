@@ -1,5 +1,10 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 0.0.3-6
+
+- change name addon;
+- removing unused code; 
+
 ## 0.0.3-5
 
 - edit script for init-postfix

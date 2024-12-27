@@ -18,7 +18,6 @@ if ! mynetworks=$(bashio::config 'mynetworks | join(", ")'); then
     exit 1
 fi
 
-# add domain
 bashio::log.info "Set hostname to $DOMAIN..."
 postconf -e myhostname="$DOMAIN"
 postconf -e mydestination="localhost"
@@ -26,19 +25,7 @@ echo "$DOMAIN" > /etc/mailname
 echo "$DOMAIN" > /etc/hostname
 bashio::log.info "Set hostname to $DOMAIN... Done"
 
-#bashio::log.info "Merging options & variables for template"
-# shellcheck disable=SC2046
-#JSON_CONF=$(jq '({options: .})' /data/options.json)
-
-#bashio::log.info "Generating postfix/main.cf from template in /etc/postfix/main.cf.gtpl"
-# shellcheck disable=SC2086
-#echo $JSON_CONF | tempio \
-#    -template /etc/postfix/main.cf.gtpl \
-#    -out /etc/postfix/main.cf.tmp
-
-# add mynetworks in config
 bashio::log.info "Configure mynetworks..."
-
 if grep -q "^mynetworks = " /etc/postfix/main.cf; then
     sed -i "s|^mynetworks = .*|mynetworks = ${mynetworks}|" /etc/postfix/main.cf
     bashio::log.info "mynetworks ${mynetworks} - Updated"
@@ -46,5 +33,4 @@ else
     echo "mynetworks = ${mynetworks}" >> /etc/postfix/main.cf
     bashio::log.info "mynetworks ${mynetworks} - Added in config"
 fi
-
 bashio::log.info "Init script done!"

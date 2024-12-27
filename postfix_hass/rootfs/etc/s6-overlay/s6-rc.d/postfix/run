@@ -7,7 +7,6 @@
 
 set -e
 
-# start postfix
 bashio::log.info "Running postfix..."
 /usr/sbin/postfix start-fg
 bashio::log.info "Running postfix... Done"

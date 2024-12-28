@@ -1,0 +1,12 @@
+#!/command/with-contenv bashio
+# vim: ft=bash
+# shellcheck shell=bash
+# ==============================================================================
+# Start syslog-ng service
+# ==============================================================================
+
+set -e
+
+bashio::log.info "Running syslog-ng..."
+/usr/sbin/syslog-ng --cfgfile=/etc/syslog-ng/syslog-ng.conf -F
+bashio::log.info "Running syslog-ng... Done"

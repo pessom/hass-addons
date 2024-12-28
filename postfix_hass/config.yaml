@@ -1,5 +1,5 @@
 ---
-version: 0.0.3-6
+version: 0.0.4
 slug: postfix_hass
 name: postfix
 description: relay emails

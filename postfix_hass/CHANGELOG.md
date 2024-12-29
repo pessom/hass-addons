@@ -1,6 +1,6 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
-## 0.0.4
+## 0.0.3-beta7
 
 - add syslog-ng;
 - configuring syslog-ng; 

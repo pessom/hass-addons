@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 0.0.3-beta10
+
+- add config postfix; 
+
 ## 0.0.3-beta9
 
 - edit startup syslog-ng; 

@@ -18,6 +18,12 @@ if ! mynetworks=$(bashio::config 'mynetworks | join(", ")'); then
     exit 1
 fi
 
+# Ensures the postfix data is stored outside the container
+if ! bashio::fs.directory_exists '/data/postfix'; then
+    bashio::log.info "Created data directory"
+    mkdir -p /data/postfix
+fi
+
 bashio::log.info "Set hostname to $DOMAIN..."
 postconf -e myhostname="$DOMAIN"
 postconf -e mydestination="localhost"

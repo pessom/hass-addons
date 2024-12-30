@@ -53,7 +53,7 @@ compatibility_level = 3.8
 # See the files in examples/chroot-setup for setting up Postfix chroot
 # environments on different UNIX systems.
 #
-queue_directory = /var/spool/postfix
+queue_directory = /data/postfix
 
 # The command_directory parameter specifies the location of all
 # postXXX commands.
@@ -99,6 +99,7 @@ mail_owner = postfix
 #
 #myhostname = host.domain.tld
 #myhostname = virtual.domain.tld
+myhostname = hass.local
 
 # The mydomain parameter specifies the local internet domain name.
 # The default is to use $myhostname minus the first component.
@@ -138,6 +139,7 @@ mail_owner = postfix
 #inet_interfaces = all
 #inet_interfaces = $myhostname
 #inet_interfaces = $myhostname, localhost
+inet_interfaces = all
 
 # The proxy_interfaces parameter specifies the network interface
 # addresses that this mail system receives mail on by way of a
@@ -186,6 +188,7 @@ mail_owner = postfix
 #mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 #mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain,
 #       mail.$mydomain, www.$mydomain, ftp.$mydomain
+mydestination = localhost
 
 # REJECTING MAIL FOR UNKNOWN LOCAL USERS
 #
@@ -288,6 +291,7 @@ unknown_local_recipient_reject_code = 550
 #mynetworks = 168.100.3.0/28, 127.0.0.0/8
 #mynetworks = $config_directory/mynetworks
 #mynetworks = hash:/etc/postfix/network_table
+mynetworks = 127.0.0.1/32
 
 # The relay_domains parameter restricts what destinations this system will
 # relay mail to.  See the smtpd_relay_restrictions and
@@ -688,7 +692,5 @@ inet_protocols = ipv4
 shlib_directory = /usr/lib/postfix
 meta_directory = /etc/postfix
 
-myhostname = hass.local
-mydestination = localhost
-mynetworks = 127.0.0.1
+# adding parameters
 maillog_file = /dev/stdout

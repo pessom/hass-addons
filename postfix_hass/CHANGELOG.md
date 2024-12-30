@@ -1,27 +1,13 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
-## 0.0.3-beta12
+## 0.0.4
 
+- create config postfix in repo;
 - remove syslog-ng; 
-
-## 0.0.3-beta11
-
 - syslog-ng config set ~defaul; 
-
-## 0.0.3-beta10
-
 - add config postfix; 
-
-## 0.0.3-beta9
-
 - edit startup syslog-ng; 
-
-## 0.0.3-beta8
-
 - fix problem on startup syslog-ng; 
-
-## 0.0.3-beta7
-
 - add syslog-ng;
 - configuring syslog-ng; 
 

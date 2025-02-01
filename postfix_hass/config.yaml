@@ -1,9 +1,9 @@
 ---
 version: 0.0.4
-slug: postfix_hass
+slug: postfix_hass_testing
 name: postfix
 description: relay emails
-url: https://github.com/pessom/hass-addons/tree/main/postfix_hass
+url: https://github.com/pessom/hass-addons/tree/main/postfix_hass_testing
 arch:
   - aarch64
   - amd64

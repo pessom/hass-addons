@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/hass-addons.iml" filepath="$PROJECT_DIR$/.idea/hass-addons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../hass-addons_testing/.idea/hass-addons_testing.iml" filepath="$PROJECT_DIR$/../hass-addons_testing/.idea/hass-addons_testing.iml" />
     </modules>
   </component>
 </project>

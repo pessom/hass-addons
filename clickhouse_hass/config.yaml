@@ -1,0 +1,32 @@
+---
+version: 0.0.1
+slug: clickhouse_hass_testing
+name: clickhouse
+description: clickhouse-server
+url: https://github.com/pessom/hass-addons/tree/main/clickhouse_hass_testing
+arch:
+  - amd64
+init: false
+map:
+  - ssl
+  - share
+#options:
+#  http_port: 8124
+#  tcp_port: 9000
+#  mysq_port: 9004
+#  postgresql_port: 9005
+#schema:
+#  http_port: port
+#  tcp_port: port
+#  mysq_port: port
+#  postgresql_port: port
+ports:
+  8124/tcp: 8124
+  9000/tcp: 9000
+  9004/tcp: 9004
+  9005/tcp: 9005
+ports_description:
+  8124/tcp: "http port"
+  9000/tcp: "tcp port"
+  9004/tcp: "mysq_port port"
+  9005/tcp: "postgresql_port port"

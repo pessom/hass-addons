@@ -1,0 +1,57 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Init clickhouse-server - generate config from options
+# ==============================================================================
+
+set -e
+
+bashio::log.info "Running init script..."
+
+if [ ! -d "/data/config/clickhouse-server" ]; then
+    bashio::log.info "Create dir for configurations clickhouse-server..."
+    mkdir -p /data/config/
+    cp -r /opt/etc/clickhouse-server /data/config
+fi
+
+if [ ! -d "/data/config/clickhouse-client" ]; then
+    bashio::log.info "Create dir for configurations clickhouse-client..."
+    mkdir -p /data/config/clickhouse-client
+    cp -r /opt/etc/clickhouse-client /data/config/
+fi
+
+if [ ! -d "/data/clickhouse/data" ]; then
+    bashio::log.info "Create dir for data clickhouse-server..."
+    mkdir -p /data/clickhouse/data
+#    cp -r /var/lib/clickhouse/* /data/clickhouse/data/
+fi
+
+# prepare config
+mkdir -p /data/config/clickhouse-server/config.d
+[ -f /data/config/clickhouse-server/config.d/hass.xml ] || echo '<?xml version="1.0" encoding="UTF-8"?><clickhouse></clickhouse>' > /data/config/clickhouse-server/config.d/hass.xml
+xmlstarlet ed -L \
+    -s "/clickhouse" -t elem -n "logger" -v "" \
+    -s "/clickhouse/logger" -t elem -n "level" -v "information" \
+    -s "/clickhouse/logger" -t elem -n "log" \
+    -s "/clickhouse/logger" -t elem -n "errorlog" \
+    -s "/clickhouse/logger" -t elem -n "console" -v "1" \
+    -s "/clickhouse" -t elem -n "path" -v "/data/clickhouse/data" \
+    -s "/clickhouse" -t elem -n "tmp_path" -v "/data/clickhouse/data/tmp/" \
+    -s "/clickhouse" -t elem -n "custom_cached_disks_base_directory" -v "/data/clickhouse/data/caches/" \
+    -s "/clickhouse" -t elem -n "user_files_path" -v "/data/clickhouse/data/user_files/" \
+    -s "/clickhouse" -t elem -n "format_schema_path" -v "/data/clickhouse/data/format_schemas/" \
+    -s "/clickhouse" -t elem -n "user_directories" -v "" \
+    -s "/clickhouse/user_directories" -t elem -n "local_directory" -v "" \
+    -s "/clickhouse/user_directories/local_directory" -t elem -n "path" -v "/data/clickhouse/data/access/" \
+    -s "/clickhouse" -t elem -n "listen_host" -v "0.0.0.0" \
+    -s "/clickhouse" -t elem -n "http_port" -v "8124" \
+    -s "/clickhouse" -t elem -n "tcp_port" -v "9000" \
+    -s "/clickhouse" -t elem -n "mysql_port" -v "9004" \
+    -s "/clickhouse" -t elem -n "postgresql_port" -v "9005" \
+    /data/config/clickhouse-server/config.d/hass.xml
+
+chown clickhouse:clickhouse /data/clickhouse/data/
+chmod ugo+Xrw -R /data/clickhouse/data/ /data/config/clickhouse-server/ /data/config/clickhouse-client/
+
+bashio::log.info "Init script done!"
+

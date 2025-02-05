@@ -1,8 +1,8 @@
 ---
 version: 0.0.4
 slug: postfix_hass
-name: postfix
-description: relay emails
+name: Postfix
+description: Relay email messages
 url: https://github.com/pessom/hass-addons/tree/main/postfix_hass
 arch:
   - aarch64

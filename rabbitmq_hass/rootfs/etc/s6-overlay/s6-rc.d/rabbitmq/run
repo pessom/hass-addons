@@ -1,0 +1,11 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# start rabbitmq-server
+# ==============================================================================
+
+set -e
+
+bashio::log.info "Starting rabbitmq..."
+exec /usr/sbin/rabbitmq-server
+bashio::log.info "rabbitmq started!"

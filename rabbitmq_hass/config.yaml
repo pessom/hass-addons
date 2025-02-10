@@ -1,0 +1,128 @@
+---
+version: 0.0.1
+slug: rabbitmq_hass
+name: RabbitMQ
+description: >-
+  Reliable and mature messaging and streaming broker.
+url: https://github.com/pessom/hass-addons/tree/main/rabbitmq_hass
+arch:
+  - amd64
+init: false
+map:
+  - ssl
+options:
+  log_level: info
+  plugins:
+    rabbitmq_amqp1_0: False
+    rabbitmq_auth_backend_cache: False
+    rabbitmq_auth_backend_http: False
+    rabbitmq_auth_backend_ldap: False
+    rabbitmq_auth_backend_oauth2: False
+    rabbitmq_auth_mechanism_ssl: False
+    rabbitmq_consistent_hash_exchange: False
+    rabbitmq_event_exchange: False
+    rabbitmq_federation: False
+    rabbitmq_federation_management: False
+    rabbitmq_jms_topic_exchange: False
+    rabbitmq_management: False
+    rabbitmq_management_agent: False
+    rabbitmq_mqtt: False
+    rabbitmq_peer_discovery_aws: False
+    rabbitmq_peer_discovery_common: False
+    rabbitmq_peer_discovery_consul: False
+    rabbitmq_peer_discovery_etcd: False
+    rabbitmq_peer_discovery_k8s: False
+    rabbitmq_prometheus: False
+    rabbitmq_random_exchange: False
+    rabbitmq_recent_history_exchange: False
+    rabbitmq_sharding: False
+    rabbitmq_shovel: False
+    rabbitmq_shovel_management: False
+    rabbitmq_stomp: False
+    rabbitmq_stream: False
+    rabbitmq_stream_management: False
+    rabbitmq_top: False
+    rabbitmq_tracing: False
+    rabbitmq_trust_store: False
+    rabbitmq_web_dispatch: False
+    rabbitmq_web_mqtt: False
+    rabbitmq_web_mqtt_examples: False
+    rabbitmq_web_stomp: False
+    rabbitmq_web_stomp_examples: False
+  users:
+    - username: admin
+      password: admin_password
+      tags: administrator
+    - username: manage
+      password: manage_password
+      tags: management
+    - username: monitor
+      password: monitor_password
+      tags: monitoring
+    - username: worker
+      password: worker_password
+      tags: none
+schema:
+  log_level: list(info|error)?
+  plugins:
+    rabbitmq_amqp1_0: bool
+    rabbitmq_auth_backend_cache: bool
+    rabbitmq_auth_backend_http: bool
+    rabbitmq_auth_backend_ldap: bool
+    rabbitmq_auth_backend_oauth2: bool
+    rabbitmq_auth_mechanism_ssl: bool
+    rabbitmq_consistent_hash_exchange: bool
+    rabbitmq_event_exchange: bool
+    rabbitmq_federation: bool
+    rabbitmq_federation_management: bool
+    rabbitmq_jms_topic_exchange: bool
+    rabbitmq_management: bool
+    rabbitmq_management_agent: bool
+    rabbitmq_mqtt: bool
+    rabbitmq_peer_discovery_aws: bool
+    rabbitmq_peer_discovery_common: bool
+    rabbitmq_peer_discovery_consul: bool
+    rabbitmq_peer_discovery_etcd: bool
+    rabbitmq_peer_discovery_k8s: bool
+    rabbitmq_prometheus: bool
+    rabbitmq_random_exchange: bool
+    rabbitmq_recent_history_exchange: bool
+    rabbitmq_sharding: bool
+    rabbitmq_shovel: bool
+    rabbitmq_shovel_management: bool
+    rabbitmq_stomp: bool
+    rabbitmq_stream: bool
+    rabbitmq_stream_management: bool
+    rabbitmq_top: bool
+    rabbitmq_tracing: bool
+    rabbitmq_trust_store: bool
+    rabbitmq_web_dispatch: bool
+    rabbitmq_web_mqtt: bool
+    rabbitmq_web_mqtt_examples: bool
+    rabbitmq_web_stomp: bool
+    rabbitmq_web_stomp_examples: bool
+  users:
+    - username: "str"
+      password: "password"
+      tags: list(management|policymaker|monitoring|administrator|none)?
+
+ports:
+  1883/tcp: 1883
+  5552/tcp: 5552
+  5672/tcp: 5672
+  15672/tcp: 15672
+  15674/tcp: 15674
+  15675/tcp: 15675
+  15692/tcp: 15692
+  25672/tcp: 25672
+  61613/tcp: 61613
+ports_description:
+  1883/tcp: "MQTT plugin without TLS"
+  5552/tcp: "Stream plugin without TLS"
+  5672/tcp: "RabbitMQ without TLS"
+  15672/tcp: "Management plugin without TLS"
+  15674/tcp: "Web STOMP plugin without TLS"
+  15675/tcp: "Web MQTT plugin without TLS"
+  15692/tcp: "Prometheus metrics without TLS"
+  25672/tcp: "epmd - a peer discovery service used by RabbitMQ nodes and CLI tools"
+  61613/tcp: "STOMP plugin without TLS"

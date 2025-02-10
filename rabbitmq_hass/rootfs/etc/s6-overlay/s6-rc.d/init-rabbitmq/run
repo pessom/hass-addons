@@ -1,0 +1,55 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Init rabbitmq - generate config from options
+# ==============================================================================
+
+set -e
+
+bashio::log.info "Running init script..."
+
+RABBITMQ_CONFIG="/data/config/"
+RABBITMQ_CONFIG_EXTEND="${RABBITMQ_CONFIG}/conf.d/"
+RABBITMQ_DATA_DIR="/data/rabbitmq/"
+RABBITMQ_LOG_DIR="/var/log/rabbitmq/"
+plugins=$(bashio::config 'plugins' | jq -r 'to_entries | .[] | select(.value==true) | .key' | paste -sd "," -)
+
+if [ ! -d "$RABBITMQ_CONFIG" ]; then
+    bashio::log.info "Creating directory for rabbitmq configs..."
+    mkdir -p "$RABBITMQ_CONFIG" || { bashio::log.error "Failed to create directory $RABBITMQ_CONFIG"; exit 1; }
+
+    # Copy rabbitmq.conf if it doesn't exist
+    if [ ! -f "${RABBITMQ_CONFIG}/rabbitmq.conf" ]; then
+        bashio::log.info "Copying rabbitmq.conf..."
+        cp /opt/rabbitmq/rabbitmq.conf "${RABBITMQ_CONFIG}/rabbitmq.conf" || { bashio::log.error "Failed to copy rabbitmq.conf"; exit 1; }
+    fi
+
+    # Copy empty definitions file if it doesn't exist
+    if [ ! -f "${RABBITMQ_CONFIG}/definitions.json" ]; then
+        bashio::log.info "Copying definitions.json..."
+        cp /opt/rabbitmq/definitions.json "${RABBITMQ_CONFIG}/definitions.json" || { bashio::log.error "Failed to copy definitions.json"; exit 1; }
+    fi
+
+    if [ ! -d "$RABBITMQ_CONFIG_EXTEND" ]; then
+        bashio::log.info "Creating directory for rabbitmq configs extend..."
+        mkdir -p "$RABBITMQ_CONFIG_EXTEND" || { bashio::log.error "Failed to create directory $RABBITMQ_CONFIG_EXTEND"; exit 1; }
+        cp /opt/rabbitmq/conf.d/* "${RABBITMQ_CONFIG_EXTEND}" || { bashio::log.error "Failed to copy rabbitmq extend configs"; exit 1; }
+    fi
+
+fi
+
+if [ ! -d "$RABBITMQ_DATA_DIR" ]; then
+    bashio::log.info "Creating directory for rabbitmq data..."
+    mkdir -p "$RABBITMQ_DATA_DIR" || { bashio::log.error "Failed to create directory $RABBITMQ_DATA_DIR"; exit 1; }
+fi
+
+# Enable plugins from the plugins variable
+bashio::log.info "Enabling plugins: ${plugins}"
+echo "[${plugins}]." > "${RABBITMQ_CONFIG}/enabled_plugins"
+
+# Set correct permissions
+chown -R rabbitmq:rabbitmq "${RABBITMQ_CONFIG}"
+chown -R rabbitmq:rabbitmq "${RABBITMQ_DATA_DIR}"
+chown -R rabbitmq:rabbitmq "${RABBITMQ_LOG_DIR}"
+
+bashio::log.info "Init script completed successfully!"

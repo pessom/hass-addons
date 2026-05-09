@@ -1,5 +1,5 @@
 ---
-version: 3.8.13-ha2
+version: 3.8.13-ha3
 slug: postfix_hass
 name: Postfix
 description: Full-featured Postfix SMTP server with relay, TLS and SASL support
@@ -43,6 +43,16 @@ options:
   sasl:
     smtp_enabled: false
     smtpd_enabled: false
+  limits: {}
+  virtual:
+    alias_domains: []
+    alias_maps: []
+    mailbox_domains: []
+    mailbox_maps: []
+  restrictions:
+    relay_restrictions: []
+    recipient_restrictions: []
+    client_restrictions: []
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)
 

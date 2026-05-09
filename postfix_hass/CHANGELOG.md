@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.8.13-ha3
+
+- Fix: schema groups virtual/limits/restrictions were missing default values in options — caused "Missing option" error on config save
+
 ## 3.8.13-ha2
 
 - Add aliases support: /config/postfix/aliases loaded on every startup

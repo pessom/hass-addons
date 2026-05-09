@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.10.9-ha3
+
+- Fix: run postfix set-permissions in init to fix queue directory permissions on startup
+
 ## 3.10.9-ha2
 
 - Fix: config map changed to config:rw — /config/postfix was not writable, causing startup failure

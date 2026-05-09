@@ -300,3 +300,7 @@ fi
 cp /config/postfix/aliases /etc/aliases
 newaliases
 bashio::log.info "Aliases loaded."
+
+# ── Fix queue directory permissions ──────────────────────────────────────────
+postfix set-permissions
+bashio::log.info "Queue permissions set."

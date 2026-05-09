@@ -1,5 +1,5 @@
 ---
-version: 3.10.9-ha2
+version: 3.10.9-ha3
 slug: postfix_hass
 name: Postfix
 description: Full-featured Postfix SMTP server with relay, TLS and SASL support

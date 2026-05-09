@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 25.1.2.3-ha6
+
+- Update base image to amd64-base:3.23 (Alpine 3.23)
+
 ## 25.1.2.3-ha5
 
 - Fix: schema groups performance/storage were missing default values in options — caused "Missing option" error on config save

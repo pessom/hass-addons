@@ -289,3 +289,14 @@ sed \
 sed -i '/^[[:space:]]*$/d' /etc/postfix/main.cf
 
 bashio::log.info "Configuration generated successfully."
+
+# ── Aliases ──────────────────────────────────────────────────────────────────
+if ! bashio::fs.file_exists '/config/postfix/aliases'; then
+    bashio::log.info "No aliases file found, copying default..."
+    mkdir -p /config/postfix
+    cp /etc/postfix/aliases /config/postfix/aliases
+fi
+
+cp /config/postfix/aliases /etc/aliases
+newaliases
+bashio::log.info "Aliases loaded."

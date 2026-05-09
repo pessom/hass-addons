@@ -1,5 +1,5 @@
 ---
-version: 3.8.13-ha1
+version: 3.8.13-ha2
 slug: postfix_hass
 name: Postfix
 description: Full-featured Postfix SMTP server with relay, TLS and SASL support
@@ -16,6 +16,7 @@ boot: auto
 map:
   - ssl
   - share
+  - config
 ports:
   25/tcp: 25
   587/tcp: 587

@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.8.13-ha2
+
+- Add aliases support: /config/postfix/aliases loaded on every startup
+- On first start default aliases file is copied from image to /config/postfix/aliases
+- Add config to map for File Editor access
+
 ## 3.8.13-ha1
 
 - Update postfix 3.8.7 → 3.8.13 (latest in Alpine 3.19)

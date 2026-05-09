@@ -6,7 +6,16 @@
 
 set -e
 
-sleep 15s;
+bashio::log.info "Waiting for RabbitMQ to be ready..."
+timeout=60
+while ! rabbitmqctl await_startup 2>/dev/null; do
+    timeout=$((timeout - 2))
+    if [ "${timeout}" -le 0 ]; then
+        bashio::log.error "RabbitMQ did not start within 60 seconds"
+        exit 1
+    fi
+    sleep 2
+done
 
 bashio::log.info "Running users-rabbitmq script..."
 

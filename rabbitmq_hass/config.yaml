@@ -1,5 +1,5 @@
 ---
-version: 0.0.1
+version: 3.13.7-ha1
 slug: rabbitmq_hass
 name: RabbitMQ
 description: >-
@@ -8,6 +8,8 @@ url: https://github.com/pessom/hass-addons/tree/main/rabbitmq_hass
 arch:
   - amd64
 init: false
+startup: services
+boot: auto
 map:
   - ssl
 options:
@@ -63,7 +65,7 @@ options:
       password: worker_password
       tags: none
 schema:
-  log_level: list(info|error)?
+  log_level: list(debug|info|warning|error|critical|none)?
   plugins:
     rabbitmq_amqp1_0: bool
     rabbitmq_auth_backend_cache: bool

@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.10.9-ha4
+
+- Fix: create /usr/share/doc/postfix/readme directory — required by postfix set-permissions, absent in Alpine minimal image
+
 ## 3.10.9-ha3
 
 - Fix: run postfix set-permissions in init to fix queue directory permissions on startup

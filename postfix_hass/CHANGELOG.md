@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.8.7-ha2
+
+- Add master.cf.tmpl: ports 587 (submission) and 465 (smtps) now activated via UI options
+- Add ports.submission_enabled and ports.smtps_enabled config options
+- Fix: ports 587/465 were declared in config.yaml but not served by postfix
+
 ## 3.8.7-ha1
 
 - Versioning scheme changed to match bundled Postfix version (3.8.7)

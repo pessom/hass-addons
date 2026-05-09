@@ -218,6 +218,37 @@ else
     SMTPD_CLIENT_CONNECTION_COUNT_LIMIT=""
 fi
 
+# ── Ports: submission (587) and smtps (465) ──────────────────────────────────
+if bashio::var.true "$(bashio::config 'ports.submission_enabled')"; then
+    SUBMISSION_SERVICE="submission inet  n       -       n       -       -       smtpd
+        -o syslog_name=postfix/submission
+        -o smtpd_tls_security_level=encrypt
+        -o smtpd_sasl_auth_enable=yes
+        -o smtpd_relay_restrictions=permit_sasl_authenticated,reject"
+    bashio::log.info "Submission port 587 enabled"
+else
+    SUBMISSION_SERVICE=""
+fi
+
+if bashio::var.true "$(bashio::config 'ports.smtps_enabled')"; then
+    SMTPS_SERVICE="smtps     inet  n       -       n       -       -       smtpd
+        -o syslog_name=postfix/smtps
+        -o smtpd_tls_wrappermode=yes
+        -o smtpd_sasl_auth_enable=yes
+        -o smtpd_relay_restrictions=permit_sasl_authenticated,reject"
+    bashio::log.info "SMTPS port 465 enabled"
+else
+    SMTPS_SERVICE=""
+fi
+
+# ── Render template → master.cf ───────────────────────────────────────────────
+sed \
+    -e "s|{{SUBMISSION_SERVICE}}|${SUBMISSION_SERVICE}|g" \
+    -e "s|{{SMTPS_SERVICE}}|${SMTPS_SERVICE}|g" \
+    /etc/postfix/master.cf.tmpl > /etc/postfix/master.cf
+
+sed -i '/^[[:space:]]*$/d' /etc/postfix/master.cf
+
 # ── Render template → main.cf ─────────────────────────────────────────────────
 sed \
     -e "s|{{MYHOSTNAME}}|${MYHOSTNAME}|g" \

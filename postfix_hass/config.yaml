@@ -1,5 +1,5 @@
 ---
-version: 3.8.7-ha1
+version: 3.8.7-ha2
 slug: postfix_hass
 name: Postfix
 description: Full-featured Postfix SMTP server with relay, TLS and SASL support
@@ -36,6 +36,9 @@ options:
     smtpd_key_file: /ssl/privkey.pem
     smtp_cert_file: /ssl/fullchain.pem
     smtp_key_file: /ssl/privkey.pem
+  ports:
+    submission_enabled: false
+    smtps_enabled: false
   sasl:
     smtp_enabled: false
     smtpd_enabled: false
@@ -56,6 +59,10 @@ schema:
     relayhost: str?
     relay_domains:
       - str
+
+  ports:
+    submission_enabled: bool
+    smtps_enabled: bool
 
   sasl:
     smtp_enabled: bool

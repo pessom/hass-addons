@@ -11,7 +11,16 @@ A Home Assistant add-on repository. Each subdirectory is a standalone add-on tha
 | Directory | Description | Supported arch |
 |---|---|---|
 | `clickhouse_hass` | ClickHouse DBMS for storing HA sensor/event history | amd64 only |
-| `postfix_hass` | Postfix relay for outgoing email | all arches |
+| `postfix_hass` | Postfix SMTP server with TLS and SASL support | all arches |
+| `rtlsdr_hass` | RTL-SDR dongle exposed via rtl_tcp | amd64 only |
+
+## Versioning
+
+Version scheme: `<bundled_app_version>-ha<revision>`. Examples: `3.8.13-ha1`, `25.1.2.3-ha4`.
+
+- Bump revision (`-ha1` → `-ha2`) for addon-only changes (scripts, config)
+- Reset revision to `-ha1` when bundled app version changes
+- **Always bump version** in `config.yaml` and add entry to `CHANGELOG.md` with every change
 
 ## Add-on structure
 
@@ -36,28 +45,58 @@ Each add-on follows the same layout:
 Every add-on uses two s6 services chained via `dependencies.d/`:
 
 1. **`init-<svc>`** (oneshot) — reads `bashio::config` values, creates data dirs, generates config files. Data is always persisted under `/data/` (survives container restarts).
-2. **`<svc>`** (longrun) — starts the actual daemon in foreground. The `finish` script halts the container on non-zero exit.
+2. **`<svc>`** (longrun) — starts the actual daemon in foreground via `exec`. The `finish` script halts the container on non-zero exit.
 
 Scripts use `#!/command/with-contenv bashio` and the `bashio::` helper library for config access and logging.
+
+**Critical s6 requirements:**
+- `type` and `up` files must end with a newline (`\n`)
+- `run` and `finish` scripts must be executable (`chmod +x`)
+- Always use `exec` before the daemon command in longrun `run` scripts
+- `init: false` must be set in `config.yaml` for s6-overlay v3
+
+### Optional config parameters
+
+Parameters that should not be passed to the app when unset use `?` suffix in schema:
+
+```yaml
+schema:
+  gain: float?   # not passed to app if empty
+```
+
+In init scripts, check with `bashio::config.has_value` before using:
+
+```bash
+if bashio::config.has_value 'gain'; then
+    ARGS="${ARGS} -g $(bashio::config 'gain')"
+fi
+```
+
+### First-run file provisioning pattern
+
+For user-editable config files (e.g. postfix aliases):
+- Ship a default file in `rootfs/etc/<app>/`
+- On first start: if file absent in `/config/<app>/` → copy from image
+- On every start: always use the file from `/config/<app>/`
 
 ## Building / testing
 
 There is no local build toolchain. Add-ons are built by Home Assistant CI when pushed to GitHub. To test locally:
 
 ```bash
-# Build a specific add-on image (replace <arch> with amd64, aarch64, etc.)
 docker build \
   --build-arg BUILD_FROM=ghcr.io/home-assistant/amd64-base:3.19 \
   -t local/<addon>:test \
   ./<addon>
 ```
 
-For `clickhouse_hass`, the Dockerfile uses a two-stage build pulling binaries from the official ClickHouse image, so `docker build` requires network access.
-
 ## Key conventions
 
-- **Version bumps**: increment `version` in `config.yaml` and add an entry to `CHANGELOG.md` before every release.
-- **Slug naming**: `config.yaml` `slug` must be globally unique across HA. The clickhouse addon currently uses `clickhouse_hass_testing` (note the `_testing` suffix) even in the stable directory.
-- **Port mapping in clickhouse**: HTTP port is `8124` (not the default 8123) to avoid conflicts.
-- **ClickHouse config** is generated at runtime by `init-clickhouse-server/run` using `xmlstarlet`. The master config lives at `/data/config/clickhouse-server/config.xml`; overrides go in `config.d/hass.xml`.
-- **Postfix config**: `myhostname` and `mynetworks` are required options set via `bashio::config` in `init-postfix/run`. The queue directory is `/data/postfix`.
+- **`startup: services`** and **`boot: auto`** — required for all addons for automatic start with HA
+- **`usb: true`** — required for addons accessing USB devices (rtlsdr_hass)
+- **Port descriptions** use title case: `"HTTP port"`, `"TCP (native) port"`, not `"http port"`
+- **ClickHouse config** is regenerated from scratch on every start into `config.d/hass.xml` — never use `xmlstarlet -s` (causes duplicates on restart)
+- **Postfix config** is generated from `main.cf.tmpl` and `master.cf.tmpl` on every start
+- **TLS certificates** default to `/ssl/fullchain.pem` and `/ssl/privkey.pem` (HA shared SSL via `map: ssl`)
+- **SASL credentials** for postfix written to `/share/postfix/sasl_passwd` (via `map: share`)
+- **Mail aliases** stored in `/config/postfix/aliases` (via `map: config`), editable via File Editor addon

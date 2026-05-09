@@ -1,5 +1,5 @@
 ---
-version: 3.13.7-ha1
+version: 4.2.6-ha1
 slug: rabbitmq_hass
 name: RabbitMQ
 description: >-

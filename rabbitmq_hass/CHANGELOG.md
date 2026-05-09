@@ -1,5 +1,10 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 4.2.6-ha1
+
+- Update base image to amd64-base:3.23 (Alpine 3.23)
+- Update RabbitMQ 3.13.7 → 4.2.6
+
 ## 3.13.7-ha1
 
 - Versioning scheme changed to match bundled RabbitMQ version (3.13.7)

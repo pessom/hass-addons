@@ -1,5 +1,5 @@
 ---
-version: 25.1.2.3-ha1
+version: 25.1.2.3-ha2
 slug: clickhouse_hass
 name: ClickHouse
 description: >-
@@ -15,23 +15,21 @@ startup: services
 boot: auto
 map:
   - ssl
-#options:
-#  http_port: 8124
-#  tcp_port: 9000
-#  mysq_port: 9004
-#  postgresql_port: 9005
-#schema:
-#  http_port: port
-#  tcp_port: port
-#  mysq_port: port
-#  postgresql_port: port
+options:
+  http_port: 8124
+  tcp_port: 9000
+schema:
+  http_port: port?
+  tcp_port: port?
+  mysql_port: port?
+  postgresql_port: port?
 ports:
   8124/tcp: 8124
   9000/tcp: 9000
   9004/tcp: 9004
   9005/tcp: 9005
 ports_description:
-  8124/tcp: "http port"
-  9000/tcp: "tcp port"
-  9004/tcp: "mysq_port port"
-  9005/tcp: "postgresql_port port"
+  8124/tcp: "HTTP port"
+  9000/tcp: "TCP (native) port"
+  9004/tcp: "MySQL protocol port"
+  9005/tcp: "PostgreSQL protocol port"

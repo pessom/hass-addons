@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 25.1.2.3-ha2
+
+- Ports configurable via HA UI: http_port, tcp_port, mysql_port, postgresql_port
+- Unset ports are not added to config — ClickHouse won't listen on them
+- Fix typos in ports_description (mysq_port -> MySQL, tcp -> TCP native)
+
 ## 25.1.2.3-ha1
 
 - Versioning scheme changed to match bundled ClickHouse version (25.1.2.3)

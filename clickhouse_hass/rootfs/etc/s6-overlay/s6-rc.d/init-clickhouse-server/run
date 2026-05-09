@@ -25,9 +25,35 @@ if [ ! -d "/data/clickhouse/data" ]; then
     mkdir -p /data/clickhouse/data
 fi
 
+# ── Ports ────────────────────────────────────────────────────────────────────
+HTTP_PORT=""
+TCP_PORT=""
+MYSQL_PORT=""
+POSTGRESQL_PORT=""
+
+if bashio::config.has_value 'http_port'; then
+    HTTP_PORT="<http_port>$(bashio::config 'http_port')</http_port>"
+    bashio::log.info "HTTP port: $(bashio::config 'http_port')"
+fi
+
+if bashio::config.has_value 'tcp_port'; then
+    TCP_PORT="<tcp_port>$(bashio::config 'tcp_port')</tcp_port>"
+    bashio::log.info "TCP port: $(bashio::config 'tcp_port')"
+fi
+
+if bashio::config.has_value 'mysql_port'; then
+    MYSQL_PORT="<mysql_port>$(bashio::config 'mysql_port')</mysql_port>"
+    bashio::log.info "MySQL port: $(bashio::config 'mysql_port')"
+fi
+
+if bashio::config.has_value 'postgresql_port'; then
+    POSTGRESQL_PORT="<postgresql_port>$(bashio::config 'postgresql_port')</postgresql_port>"
+    bashio::log.info "PostgreSQL port: $(bashio::config 'postgresql_port')"
+fi
+
 # Regenerate hass.xml from scratch on every startup to avoid duplicate elements
 mkdir -p /data/config/clickhouse-server/config.d
-cat > /data/config/clickhouse-server/config.d/hass.xml << 'EOF'
+cat > /data/config/clickhouse-server/config.d/hass.xml << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <clickhouse>
     <logger>
@@ -45,12 +71,15 @@ cat > /data/config/clickhouse-server/config.d/hass.xml << 'EOF'
         </local_directory>
     </user_directories>
     <listen_host>0.0.0.0</listen_host>
-    <http_port>8124</http_port>
-    <tcp_port>9000</tcp_port>
-    <mysql_port>9004</mysql_port>
-    <postgresql_port>9005</postgresql_port>
+    ${HTTP_PORT}
+    ${TCP_PORT}
+    ${MYSQL_PORT}
+    ${POSTGRESQL_PORT}
 </clickhouse>
 EOF
+
+# Remove empty lines left by unset ports
+sed -i '/^[[:space:]]*$/d' /data/config/clickhouse-server/config.d/hass.xml
 
 chown clickhouse:clickhouse /data/clickhouse/data/
 chmod ugo+Xrw -R /data/clickhouse/data/ /data/config/clickhouse-server/ /data/config/clickhouse-client/

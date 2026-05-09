@@ -23,35 +23,36 @@ fi
 if [ ! -d "/data/clickhouse/data" ]; then
     bashio::log.info "Create dir for data clickhouse-server..."
     mkdir -p /data/clickhouse/data
-#    cp -r /var/lib/clickhouse/* /data/clickhouse/data/
 fi
 
-# prepare config
+# Regenerate hass.xml from scratch on every startup to avoid duplicate elements
 mkdir -p /data/config/clickhouse-server/config.d
-[ -f /data/config/clickhouse-server/config.d/hass.xml ] || echo '<?xml version="1.0" encoding="UTF-8"?><clickhouse></clickhouse>' > /data/config/clickhouse-server/config.d/hass.xml
-xmlstarlet ed -L \
-    -s "/clickhouse" -t elem -n "logger" -v "" \
-    -s "/clickhouse/logger" -t elem -n "level" -v "information" \
-    -s "/clickhouse/logger" -t elem -n "log" \
-    -s "/clickhouse/logger" -t elem -n "errorlog" \
-    -s "/clickhouse/logger" -t elem -n "console" -v "1" \
-    -s "/clickhouse" -t elem -n "path" -v "/data/clickhouse/data" \
-    -s "/clickhouse" -t elem -n "tmp_path" -v "/data/clickhouse/data/tmp/" \
-    -s "/clickhouse" -t elem -n "custom_cached_disks_base_directory" -v "/data/clickhouse/data/caches/" \
-    -s "/clickhouse" -t elem -n "user_files_path" -v "/data/clickhouse/data/user_files/" \
-    -s "/clickhouse" -t elem -n "format_schema_path" -v "/data/clickhouse/data/format_schemas/" \
-    -s "/clickhouse" -t elem -n "user_directories" -v "" \
-    -s "/clickhouse/user_directories" -t elem -n "local_directory" -v "" \
-    -s "/clickhouse/user_directories/local_directory" -t elem -n "path" -v "/data/clickhouse/data/access/" \
-    -s "/clickhouse" -t elem -n "listen_host" -v "0.0.0.0" \
-    -s "/clickhouse" -t elem -n "http_port" -v "8124" \
-    -s "/clickhouse" -t elem -n "tcp_port" -v "9000" \
-    -s "/clickhouse" -t elem -n "mysql_port" -v "9004" \
-    -s "/clickhouse" -t elem -n "postgresql_port" -v "9005" \
-    /data/config/clickhouse-server/config.d/hass.xml
+cat > /data/config/clickhouse-server/config.d/hass.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<clickhouse>
+    <logger>
+        <level>information</level>
+        <console>1</console>
+    </logger>
+    <path>/data/clickhouse/data</path>
+    <tmp_path>/data/clickhouse/data/tmp/</tmp_path>
+    <custom_cached_disks_base_directory>/data/clickhouse/data/caches/</custom_cached_disks_base_directory>
+    <user_files_path>/data/clickhouse/data/user_files/</user_files_path>
+    <format_schema_path>/data/clickhouse/data/format_schemas/</format_schema_path>
+    <user_directories>
+        <local_directory>
+            <path>/data/clickhouse/data/access/</path>
+        </local_directory>
+    </user_directories>
+    <listen_host>0.0.0.0</listen_host>
+    <http_port>8124</http_port>
+    <tcp_port>9000</tcp_port>
+    <mysql_port>9004</mysql_port>
+    <postgresql_port>9005</postgresql_port>
+</clickhouse>
+EOF
 
 chown clickhouse:clickhouse /data/clickhouse/data/
 chmod ugo+Xrw -R /data/clickhouse/data/ /data/config/clickhouse-server/ /data/config/clickhouse-client/
 
 bashio::log.info "Init script done!"
-

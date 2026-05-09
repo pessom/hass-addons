@@ -1,7 +1,7 @@
 #!/command/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
-# Init postfix - generate config from options
+# Start clickhouse-server
 # ==============================================================================
 
 set -e

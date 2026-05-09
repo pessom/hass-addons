@@ -1,19 +1,20 @@
 ---
-version: 0.0.1
-slug: clickhouse_hass_testing
-name: Clickhouse
+version: 25.1.2.3-ha1
+slug: clickhouse_hass
+name: ClickHouse
 description: >-
   ClickHouse is a high-performance column-oriented DBMS.
   It can be integrated with Home Assistant for storing, processing and quickly analyzing data.
   Use ClickHouse as a reliable storage of historical data on sensors, events and automations.
   This allows you to effectively analyze large volumes of information and create custom dashboards with instant analytics.
-url: https://github.com/pessom/hass-addons/tree/main/clickhouse_hass_testing
+url: https://github.com/pessom/hass-addons/tree/main/clickhouse_hass
 arch:
   - amd64
 init: false
+startup: services
+boot: auto
 map:
   - ssl
-  - share
 #options:
 #  http_port: 8124
 #  tcp_port: 9000

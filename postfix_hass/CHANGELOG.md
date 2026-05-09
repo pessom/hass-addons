@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.10.9-ha2
+
+- Fix: config map changed to config:rw — /config/postfix was not writable, causing startup failure
+
 ## 3.10.9-ha1
 
 - Update base image to amd64-base:3.23 (Alpine 3.23)

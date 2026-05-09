@@ -1,0 +1,34 @@
+---
+version: 0.0.1
+slug: rtlsdr_hass
+name: RTL-SDR TCP Server
+description: >-
+  Exposes a physically connected RTL-SDR dongle over the network via rtl_tcp,
+  allowing SDR clients (SDR#, GQRX, etc.) to connect remotely.
+url: https://github.com/pessom/hass-addons/tree/main/rtlsdr_hass
+arch:
+  - amd64
+init: false
+usb: true
+startup: services
+boot: auto
+privileged:
+  - NET_ADMIN
+  - SYS_ADMIN
+  - SYS_RAWIO
+devices:
+  - /dev/bus/usb:/dev/bus/usb:rwm
+options:
+  port: 1234
+schema:
+  port: port
+  gain: float?
+  ppm: int?
+  device_index: str?
+  sample_rate: int?
+  bias_t: bool?
+  direct_sampling: bool?
+ports:
+  1234/tcp: 1234
+ports_description:
+  1234/tcp: "rtl_tcp server port"

@@ -1,0 +1,14 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Start rtl_tcp service
+# ==============================================================================
+
+set -e
+
+ARGS=$(cat /run/rtl-tcp-args)
+
+bashio::log.info "Starting rtl_tcp ${ARGS}..."
+
+# shellcheck disable=SC2086
+exec rtl_tcp ${ARGS}

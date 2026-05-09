@@ -1,0 +1,40 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Init rtl-tcp - build run args from config, skipping unset optional values
+# ==============================================================================
+
+set -e
+
+bashio::log.info "Initializing RTL-TCP..."
+
+PORT=$(bashio::config 'port')
+ARGS="-a 0.0.0.0 -p ${PORT}"
+
+if bashio::config.has_value 'device_index'; then
+    ARGS="${ARGS} -d $(bashio::config 'device_index')"
+fi
+
+if bashio::config.has_value 'gain'; then
+    ARGS="${ARGS} -g $(bashio::config 'gain')"
+fi
+
+if bashio::config.has_value 'ppm'; then
+    ARGS="${ARGS} -P $(bashio::config 'ppm')"
+fi
+
+if bashio::config.has_value 'sample_rate'; then
+    ARGS="${ARGS} -s $(bashio::config 'sample_rate')"
+fi
+
+if bashio::config.has_value 'bias_t' && bashio::var.true "$(bashio::config 'bias_t')"; then
+    ARGS="${ARGS} -T"
+fi
+
+if bashio::config.has_value 'direct_sampling' && bashio::var.true "$(bashio::config 'direct_sampling')"; then
+    ARGS="${ARGS} -D"
+fi
+
+echo "${ARGS}" > /run/rtl-tcp-args
+
+bashio::log.info "Starting with args: ${ARGS}"

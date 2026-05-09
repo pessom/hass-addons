@@ -1,5 +1,12 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.10.9-ha1
+
+- Update base image to amd64-base:3.23 (Alpine 3.23)
+- Update postfix 3.8.13 → 3.10.9
+- Update cyrus-sasl 2.1.28-r5 → 2.1.28-r9
+- Drop multi-arch support: amd64 only (aarch64, armhf, armv7, i386 removed)
+
 ## 3.8.13-ha3
 
 - Fix: schema groups virtual/limits/restrictions were missing default values in options — caused "Missing option" error on config save

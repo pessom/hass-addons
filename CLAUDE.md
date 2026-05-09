@@ -12,6 +12,7 @@ A Home Assistant add-on repository. Each subdirectory is a standalone add-on tha
 |---|---|---|
 | `clickhouse_hass` | ClickHouse DBMS for storing HA sensor/event history | amd64 only |
 | `postfix_hass` | Postfix SMTP server with TLS and SASL support | all arches |
+| `rabbitmq_hass` | RabbitMQ messaging broker | amd64 only |
 | `rtlsdr_hass` | RTL-SDR dongle exposed via rtl_tcp | amd64 only |
 
 ## Versioning

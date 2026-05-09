@@ -68,6 +68,34 @@ Mail aliases are stored in `/config/postfix/aliases` (editable via File Editor a
 
 ---
 
+### RabbitMQ
+
+Reliable and mature messaging and streaming broker.
+
+**Supported architectures:** amd64
+
+**Ports:**
+| Port | Protocol | Description |
+|------|----------|-------------|
+| 5672 | TCP | AMQP (main protocol) |
+| 15672 | TCP | Management UI (requires rabbitmq_management plugin) |
+| 1883 | TCP | MQTT (requires rabbitmq_mqtt plugin) |
+| 5552 | TCP | Stream (requires rabbitmq_stream plugin) |
+| 15674 | TCP | Web STOMP (requires rabbitmq_web_stomp plugin) |
+| 15675 | TCP | Web MQTT (requires rabbitmq_web_mqtt plugin) |
+| 15692 | TCP | Prometheus metrics (requires rabbitmq_prometheus plugin) |
+| 25672 | TCP | Erlang distribution / clustering |
+| 61613 | TCP | STOMP (requires rabbitmq_stomp plugin) |
+
+**Key configuration options:**
+- `log_level` — log level (debug/info/warning/error/critical/none)
+- `plugins` — enable/disable individual RabbitMQ plugins (management, mqtt, stomp, stream, prometheus, etc.)
+- `users` — list of users with username, password and tags (administrator/management/monitoring/none)
+
+Users are created or updated on every addon start. Data is persisted in `/data/rabbitmq/`.
+
+---
+
 ### RTL-SDR TCP Server
 
 Exposes a physically connected RTL-SDR dongle over the network via `rtl_tcp`, allowing SDR clients (SDR#, GQRX, SDR++) to connect remotely.

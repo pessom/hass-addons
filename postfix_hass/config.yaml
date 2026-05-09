@@ -1,8 +1,8 @@
 ---
-version: 0.0.4
+version: 3.8.7-ha1
 slug: postfix_hass
 name: Postfix
-description: Relay email messages
+description: Full-featured Postfix SMTP server with relay, TLS and SASL support
 url: https://github.com/pessom/hass-addons/tree/main/postfix_hass
 arch:
   - aarch64
@@ -11,17 +11,87 @@ arch:
   - armv7
   - i386
 init: false
+startup: services
+boot: auto
 map:
   - ssl
   - share
-options:
-  log_level: info
-  myhostname: null
-  mynetworks: [ ]
 ports:
   25/tcp: 25
+  587/tcp: 587
+  465/tcp: 465
+ports_description:
+  25/tcp: "SMTP"
+  587/tcp: "SMTP Submission"
+  465/tcp: "SMTPS"
+options:
+  log_level: info
+  general:
+    hostname: ""
+  network:
+    inet_interfaces: all
+    inet_protocols: ipv4
+  tls:
+    smtpd_cert_file: /ssl/fullchain.pem
+    smtpd_key_file: /ssl/privkey.pem
+    smtp_cert_file: /ssl/fullchain.pem
+    smtp_key_file: /ssl/privkey.pem
+  sasl:
+    smtp_enabled: false
+    smtpd_enabled: false
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)
-  myhostname: str
-  mynetworks:
-    - str
+
+  general:
+    hostname: str?
+    domain: str?
+    origin: str?
+    mydestination: str?
+
+  network:
+    inet_interfaces: str
+    inet_protocols: list(ipv4|ipv6|all)
+    mynetworks:
+      - str
+    relayhost: str?
+    relay_domains:
+      - str
+
+  sasl:
+    smtp_enabled: bool
+    smtp_username: str?
+    smtp_password: password?
+    smtp_security_options: str?
+    smtpd_enabled: bool
+
+  tls:
+    smtp_level: list(none|may|encrypt)?
+    smtp_cert_file: str?
+    smtp_key_file: str?
+    smtpd_level: list(none|may|encrypt)?
+    smtpd_cert_file: str?
+    smtpd_key_file: str?
+
+  limits:
+    message_size_limit: int?
+    mailbox_size_limit: int?
+    process_limit: int?
+    connection_count_limit: int?
+
+  virtual:
+    alias_domains:
+      - str
+    alias_maps:
+      - str
+    mailbox_domains:
+      - str
+    mailbox_maps:
+      - str
+
+  restrictions:
+    relay_restrictions:
+      - str
+    recipient_restrictions:
+      - str
+    client_restrictions:
+      - str

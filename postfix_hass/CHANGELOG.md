@@ -1,5 +1,16 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.8.7-ha1
+
+- Versioning scheme changed to match bundled Postfix version (3.8.7)
+- Full configuration via HA UI: general, network, TLS, SASL, restrictions, virtual domains, limits
+- main.cf now generated from template on every startup — no more manual file editing
+- TLS cert/key default to /ssl/fullchain.pem and /ssl/privkey.pem (HA shared SSL)
+- SASL credentials written to /share/postfix/sasl_passwd automatically
+- Add startup/boot for automatic start with Home Assistant
+- Fix: added exec before postfix start-fg for correct s6 process tracking
+- Fix: log_level now applied via bashio::log.level
+
 ## 0.0.4
 
 - create config postfix in repo;

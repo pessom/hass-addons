@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 25.1.2.3-ha4
+
+- Fix: s6 type files missing newline (longrun, oneshot)
+- Fix: run and finish scripts not executable
+- Fix: unreachable log line after exec in clickhouse-server/run
+
 ## 25.1.2.3-ha3
 
 - Add logging config: level, log_queries

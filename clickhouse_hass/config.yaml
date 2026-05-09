@@ -1,5 +1,5 @@
 ---
-version: 25.1.2.3-ha3
+version: 25.1.2.3-ha4
 slug: clickhouse_hass
 name: ClickHouse
 description: >-

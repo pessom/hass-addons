@@ -8,4 +8,3 @@ set -e
 
 bashio::log.info "Starting clickhouse-server..."
 exec s6-setuidgid clickhouse /usr/bin/clickhouse-server --config-file=/data/config/clickhouse-server/config.xml
-bashio::log.info "clickhouse-server started!"

@@ -1,5 +1,5 @@
 ---
-version: 0.0.1
+version: 2.0.2-ha1
 slug: rtlsdr_hass
 name: RTL-SDR TCP Server
 description: >-

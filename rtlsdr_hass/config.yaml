@@ -1,5 +1,5 @@
 ---
-version: 2.0.2-ha1
+version: 2.0.2-ha2
 slug: rtlsdr_hass
 name: RTL-SDR TCP Server
 description: >-
@@ -17,7 +17,7 @@ privileged:
   - SYS_ADMIN
   - SYS_RAWIO
 devices:
-  - /dev/bus/usb:/dev/bus/usb:rwm
+  - /dev/bus/usb
 options:
   port: 1234
 schema:

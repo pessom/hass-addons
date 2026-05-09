@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 2.0.2-ha2
+
+- Fix: devices field updated to new list-of-paths format (removes deprecated src:dst:mode format)
+
 ## 2.0.2-ha1
 
 - Versioning scheme changed to match bundled rtl-sdr version (2.0.2)

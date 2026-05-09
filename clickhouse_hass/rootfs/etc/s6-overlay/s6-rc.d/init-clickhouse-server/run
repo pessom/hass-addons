@@ -33,32 +33,81 @@ POSTGRESQL_PORT=""
 
 if bashio::config.has_value 'http_port'; then
     HTTP_PORT="<http_port>$(bashio::config 'http_port')</http_port>"
-    bashio::log.info "HTTP port: $(bashio::config 'http_port')"
 fi
-
 if bashio::config.has_value 'tcp_port'; then
     TCP_PORT="<tcp_port>$(bashio::config 'tcp_port')</tcp_port>"
-    bashio::log.info "TCP port: $(bashio::config 'tcp_port')"
 fi
-
 if bashio::config.has_value 'mysql_port'; then
     MYSQL_PORT="<mysql_port>$(bashio::config 'mysql_port')</mysql_port>"
-    bashio::log.info "MySQL port: $(bashio::config 'mysql_port')"
 fi
-
 if bashio::config.has_value 'postgresql_port'; then
     POSTGRESQL_PORT="<postgresql_port>$(bashio::config 'postgresql_port')</postgresql_port>"
-    bashio::log.info "PostgreSQL port: $(bashio::config 'postgresql_port')"
 fi
 
-# Regenerate hass.xml from scratch on every startup to avoid duplicate elements
+# ── Logging ──────────────────────────────────────────────────────────────────
+LOG_LEVEL="information"
+if bashio::config.has_value 'logging.level'; then
+    LOG_LEVEL="$(bashio::config 'logging.level')"
+fi
+
+LOG_QUERIES=""
+if bashio::config.has_value 'logging.log_queries'; then
+    if bashio::var.true "$(bashio::config 'logging.log_queries')"; then
+        LOG_QUERIES="<log_queries>1</log_queries>"
+    else
+        LOG_QUERIES="<log_queries>0</log_queries>"
+    fi
+fi
+
+# ── Performance ───────────────────────────────────────────────────────────────
+MAX_CONNECTIONS=""
+MAX_CONCURRENT_QUERIES=""
+MAX_SERVER_MEMORY_USAGE=""
+MAX_SERVER_MEMORY_USAGE_TO_RAM_RATIO=""
+BACKGROUND_POOL_SIZE=""
+
+if bashio::config.has_value 'performance.max_connections'; then
+    MAX_CONNECTIONS="<max_connections>$(bashio::config 'performance.max_connections')</max_connections>"
+fi
+if bashio::config.has_value 'performance.max_concurrent_queries'; then
+    MAX_CONCURRENT_QUERIES="<max_concurrent_queries>$(bashio::config 'performance.max_concurrent_queries')</max_concurrent_queries>"
+fi
+if bashio::config.has_value 'performance.max_server_memory_usage'; then
+    MAX_SERVER_MEMORY_USAGE="<max_server_memory_usage>$(bashio::config 'performance.max_server_memory_usage')</max_server_memory_usage>"
+fi
+if bashio::config.has_value 'performance.max_server_memory_usage_to_ram_ratio'; then
+    MAX_SERVER_MEMORY_USAGE_TO_RAM_RATIO="<max_server_memory_usage_to_ram_ratio>$(bashio::config 'performance.max_server_memory_usage_to_ram_ratio')</max_server_memory_usage_to_ram_ratio>"
+fi
+if bashio::config.has_value 'performance.background_pool_size'; then
+    BACKGROUND_POOL_SIZE="<background_pool_size>$(bashio::config 'performance.background_pool_size')</background_pool_size>"
+fi
+
+# ── Security ─────────────────────────────────────────────────────────────────
+DEFAULT_PASSWORD=""
+if bashio::config.has_value 'security.default_password'; then
+    DEFAULT_PASSWORD="$(bashio::config 'security.default_password')"
+fi
+
+# ── Storage ───────────────────────────────────────────────────────────────────
+MAX_TABLE_SIZE_TO_DROP=""
+MAX_PARTITION_SIZE_TO_DROP=""
+
+if bashio::config.has_value 'storage.max_table_size_to_drop'; then
+    MAX_TABLE_SIZE_TO_DROP="<max_table_size_to_drop>$(bashio::config 'storage.max_table_size_to_drop')</max_table_size_to_drop>"
+fi
+if bashio::config.has_value 'storage.max_partition_size_to_drop'; then
+    MAX_PARTITION_SIZE_TO_DROP="<max_partition_size_to_drop>$(bashio::config 'storage.max_partition_size_to_drop')</max_partition_size_to_drop>"
+fi
+
+# ── Generate hass.xml ─────────────────────────────────────────────────────────
 mkdir -p /data/config/clickhouse-server/config.d
 cat > /data/config/clickhouse-server/config.d/hass.xml << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <clickhouse>
     <logger>
-        <level>information</level>
+        <level>${LOG_LEVEL}</level>
         <console>1</console>
+        ${LOG_QUERIES}
     </logger>
     <path>/data/clickhouse/data</path>
     <tmp_path>/data/clickhouse/data/tmp/</tmp_path>
@@ -75,11 +124,35 @@ cat > /data/config/clickhouse-server/config.d/hass.xml << EOF
     ${TCP_PORT}
     ${MYSQL_PORT}
     ${POSTGRESQL_PORT}
+    ${MAX_CONNECTIONS}
+    ${MAX_CONCURRENT_QUERIES}
+    ${MAX_SERVER_MEMORY_USAGE}
+    ${MAX_SERVER_MEMORY_USAGE_TO_RAM_RATIO}
+    ${BACKGROUND_POOL_SIZE}
+    ${MAX_TABLE_SIZE_TO_DROP}
+    ${MAX_PARTITION_SIZE_TO_DROP}
 </clickhouse>
 EOF
 
-# Remove empty lines left by unset ports
 sed -i '/^[[:space:]]*$/d' /data/config/clickhouse-server/config.d/hass.xml
+
+# ── Default user password ─────────────────────────────────────────────────────
+if [ -n "${DEFAULT_PASSWORD}" ]; then
+    PASSWORD_SHA256=$(echo -n "${DEFAULT_PASSWORD}" | sha256sum | awk '{print $1}')
+    cat > /data/config/clickhouse-server/config.d/hass-users.xml << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<clickhouse>
+    <users>
+        <default>
+            <password_sha256_hex>${PASSWORD_SHA256}</password_sha256_hex>
+        </default>
+    </users>
+</clickhouse>
+EOF
+    bashio::log.info "Default user password set."
+else
+    rm -f /data/config/clickhouse-server/config.d/hass-users.xml
+fi
 
 chown clickhouse:clickhouse /data/clickhouse/data/
 chmod ugo+Xrw -R /data/clickhouse/data/ /data/config/clickhouse-server/ /data/config/clickhouse-client/

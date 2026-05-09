@@ -1,5 +1,5 @@
 ---
-version: 25.1.2.3-ha2
+version: 25.1.2.3-ha3
 slug: clickhouse_hass
 name: ClickHouse
 description: >-
@@ -18,11 +18,35 @@ map:
 options:
   http_port: 8124
   tcp_port: 9000
+  logging:
+    level: information
+    log_queries: false
+  security:
+    default_password: ""
 schema:
   http_port: port?
   tcp_port: port?
   mysql_port: port?
   postgresql_port: port?
+
+  logging:
+    level: list(trace|debug|information|warning|error)?
+    log_queries: bool?
+
+  performance:
+    max_connections: int?
+    max_concurrent_queries: int?
+    max_server_memory_usage: int?
+    max_server_memory_usage_to_ram_ratio: float?
+    background_pool_size: int?
+
+  security:
+    default_password: str?
+
+  storage:
+    max_table_size_to_drop: int?
+    max_partition_size_to_drop: int?
+
 ports:
   8124/tcp: 8124
   9000/tcp: 9000

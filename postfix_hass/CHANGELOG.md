@@ -1,5 +1,11 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 3.8.13-ha1
+
+- Update postfix 3.8.7 → 3.8.13 (latest in Alpine 3.19)
+- Add postfix-pcre for regexp-based header_checks and body_checks
+- Add cyrus-sasl, cyrus-sasl-login, cyrus-sasl-crammd5 for SASL authentication on inbound connections
+
 ## 3.8.7-ha2
 
 - Add master.cf.tmpl: ports 587 (submission) and 465 (smtps) now activated via UI options

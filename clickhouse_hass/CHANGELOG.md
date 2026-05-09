@@ -1,5 +1,9 @@
 <!-- https://developers.home-assistant.io/docs/add-ons/presentation#keeping-a-changelog -->
 
+## 25.1.2.3-ha5
+
+- Fix: schema groups performance/storage were missing default values in options — caused "Missing option" error on config save
+
 ## 25.1.2.3-ha4
 
 - Fix: s6 type files missing newline (longrun, oneshot)

@@ -1,5 +1,5 @@
 ---
-version: 25.1.2.3-ha4
+version: 25.1.2.3-ha5
 slug: clickhouse_hass
 name: ClickHouse
 description: >-
@@ -21,8 +21,10 @@ options:
   logging:
     level: information
     log_queries: false
+  performance: {}
   security:
     default_password: ""
+  storage: {}
 schema:
   http_port: port?
   tcp_port: port?

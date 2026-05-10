@@ -302,5 +302,16 @@ newaliases
 bashio::log.info "Aliases loaded."
 
 # ── Fix queue directory permissions ──────────────────────────────────────────
-postfix set-permissions
+# postfix:postfix = 207:207, postdrop = 208
+for dir in active bounce corrupt defer deferred flush hold incoming private saved trace; do
+    mkdir -p "/var/spool/postfix/${dir}"
+    chown 207:207 "/var/spool/postfix/${dir}"
+    chmod 700 "/var/spool/postfix/${dir}"
+done
+mkdir -p /var/spool/postfix/maildrop
+chown 207:208 /var/spool/postfix/maildrop
+chmod 730 /var/spool/postfix/maildrop
+mkdir -p /var/spool/postfix/public
+chown 207:208 /var/spool/postfix/public
+chmod 710 /var/spool/postfix/public
 bashio::log.info "Queue permissions set."
